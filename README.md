@@ -1,0 +1,1 @@
+LoRaWANOTAA-I-Nucleo-LRWAN
