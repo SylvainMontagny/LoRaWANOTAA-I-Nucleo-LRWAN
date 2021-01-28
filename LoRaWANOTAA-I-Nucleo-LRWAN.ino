@@ -1,19 +1,21 @@
 
 #include "LoRaWANNode.h"
 
-#define SEND_BY_PUSH_BUTTON true     // Sending method (Time or Push Button)     
-#define FRAME_DELAY         5000      // Time between 2 frames
-#define DATA_RATE           4
-#define ADAPTIVE_DR         true
-#define CONFIRMED           true
+#define SEND_BY_PUSH_BUTTON fasle     // Sending method (Time or Push Button)     
+#define FRAME_DELAY         8000      // Time between 2 frames
+#define DATA_RATE           5
+#define ADAPTIVE_DR         false
+#define CONFIRMED           false
 #define PORT                1
 
 
 HardwareSerial SerialLora(D0, D1); // D0(Rx) D1(TX)
 HardwareSerial Serial1(PA10, PA9);
 
-const char appKey[] = "E24F43FFFE44CE1D7C96EF9AA9DF9ED8";
-const char appEUI[] = "70B3D57ED0017552";
+// The DevEUI is already in the Device and cannot be changed
+const char appKey[] = " ";
+const char appEUI[] = " ";
+
 
 char frameTx[] = "Hello";
 String str;
@@ -54,9 +56,10 @@ void receive(void) {
   // Check if data received from a gateway
   if(loraNode.receiveFrame(frameRx, &len, &port)) {
     uint8_t n = 0;
-    Serial1.print(" Frame received: 0x");
+    Serial1.print(" Frame received: (Hexa)");
     while(len > 0) {
       Serial1.print(frameRx[n], HEX);
+      Serial1.print(frameRx[n]);
       Serial1.print(',');
       len--;
       n++;
@@ -89,17 +92,14 @@ void infoBeforeActivation(void){
     Serial1.println(" Lora module not ready");
     delay(1000);
   }
-  
  
   str = " * Device EUI :      0x ";
   loraNode.getDevEUI(&str);
   Serial1.println(str);
-  str = " * Application key : 0x ";
-  loraNode.getAppKey(&str);
-  Serial1.println(str);
-  str = " * Application EUI : 0x ";
-  loraNode.getAppEUI(&str);
-  Serial1.println(str);Serial1.print("\r\n");
+  Serial1.print(" * Application key : 0x ");
+  Serial1.println(appKey);
+  Serial1.print(" * Application EUI : 0x ");
+  Serial1.println(appEUI);Serial1.print("\r\n");
 
   loraNode.setAdaptativeDataRate(DISABLE);
   loraNode.setDataRate(DATA_RATE);
