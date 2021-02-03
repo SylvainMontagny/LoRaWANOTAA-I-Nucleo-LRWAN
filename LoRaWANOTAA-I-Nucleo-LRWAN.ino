@@ -1,7 +1,7 @@
 
 #include "LoRaWANNode.h"
 
-#define SEND_BY_PUSH_BUTTON fasle     // Sending method (Time or Push Button)     
+#define SEND_BY_PUSH_BUTTON false     // Sending method (Time or Push Button)     
 #define FRAME_DELAY         8000      // Time between 2 frames
 #define DATA_RATE           5
 #define ADAPTIVE_DR         false
@@ -13,8 +13,8 @@ HardwareSerial SerialLora(D0, D1); // D0(Rx) D1(TX)
 HardwareSerial Serial1(PA10, PA9);
 
 // The DevEUI is already in the Device and cannot be changed
-const char appKey[] = " ";
-const char appEUI[] = " ";
+const char appKey[] = "";
+const char appEUI[] = "";
 
 
 char frameTx[] = "Hello";
@@ -53,14 +53,14 @@ void receive(void) {
   uint8_t len;
   uint8_t port;
 
-  // Check if data received from a gateway
   if(loraNode.receiveFrame(frameRx, &len, &port)) {
     uint8_t n = 0;
-    Serial1.print(" Frame received: (Hexa)");
+    Serial1.print(" Frame received: ");
     while(len > 0) {
       Serial1.print(frameRx[n], HEX);
+      Serial1.print("(Hexa) ");
       Serial1.print(frameRx[n]);
-      Serial1.print(',');
+      Serial1.print("(Dec), ");
       len--;
       n++;
     }
@@ -130,7 +130,7 @@ void infoAfterActivation(void){
   Serial1.println(str);Serial1.print("\r\n");
 
   if(SEND_BY_PUSH_BUTTON == 0){
-    Serial1.print(" Frame will be sent every");Serial1.print(FRAME_DELAY);Serial1.println(" ms\r\n");
+    Serial1.print(" Frame will be sent every ");Serial1.print(FRAME_DELAY);Serial1.println(" ms\r\n");
   }
   else {
     Serial1.println(" Press Blue Button to send a Frame\r\n");
